@@ -9,3 +9,10 @@ def ping(event, context):
             }
         ),
     }
+
+def url_verify(event, context):
+    body = event["body"]
+    return {
+        "statusCode": 200,
+        "body": json.dumps(body),
+    }
