@@ -31,20 +31,20 @@ Resources:
       Dockerfile: Dockerfile
       DockerContext: ./app
       DockerTag: python3.9-v1
-  UrlVerifyFunction:
+  MainFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-url-verify
+      FunctionName: !Sub ${AWS::StackName}-main
       PackageType: Image
       ImageConfig:
-        Command: [ "app.url_verify" ]
+        Command: [ "app.main" ]
       Architectures:
         - x86_64
       Events:
         MyApiGateway:
           Type: Api
           Properties:
-            Path: /url-verify
+            Path: /
             Method: post
     Metadata:
       Dockerfile: Dockerfile
