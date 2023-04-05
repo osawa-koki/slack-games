@@ -58,18 +58,14 @@ def main(event, context):
 
     # ここからメイン処理！
     url = "https://slack.com/api/chat.postMessage"
-    headers = {
-        "Content-Type": "application/www-form-urlencoded",
-    }
     form_data = {
         "token": SLACK_TOKEN,
         "channel": body["event"]["channel"],
         "text": "Hello World!",
     }
-    requests.post(url, headers=headers, data=form_data)
+    requests.post(url, data=form_data)
     logger.info({
         "url": url,
-        "headers": headers,
         "form_data": form_data,
         "message": "Slackにメッセージを送信しました。",
     })
