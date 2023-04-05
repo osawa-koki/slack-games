@@ -15,7 +15,10 @@ def ping(event, context):
     }
 
 def main(event, context):
-    body = json.loads(event['body'])
+    try:
+        body = json.loads(event['body'])
+    except:
+        body = None
 
     # ボディが空の場合は400を返す
     if body is None:
