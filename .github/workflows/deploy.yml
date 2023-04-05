@@ -25,7 +25,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Create .env file
         run: echo $'${{ secrets.API_DOTENV }}' > .env
-        working-directory: ${{ env.api-directory }}
+        working-directory: ${{ env.api-directory }}/app
       - run: sam build --use-container
         working-directory: ${{ env.api-directory }}
       - name: Deploy Lambda
