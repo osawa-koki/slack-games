@@ -1,0 +1,62 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+env:
+  project-name: slack-games
+  api-directory: ./api
+  api-gateway-name: MyApiGateway
+
+jobs:
+  lambda-deploy:
+    if: ${{ needs.lambda-test.outputs.test-status == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - run: sam build --use-container
+        working-directory: ${{ env.api-directory }}
+      - name: Deploy Lambda
+        run: |
+          sam deploy \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --resolve-image-repos \
+            --stack-name ${{ env.project-name }} \
+            --s3-bucket ${{ env.project-name }} \
+            --capabilities CAPABILITY_IAM \
+          || aws s3 mb s3://${{ env.project-name }} && sam deploy \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --resolve-image-repos \
+            --stack-name ${{ env.project-name }} \
+            --s3-bucket ${{ env.project-name }} \
+            --capabilities CAPABILITY_IAM
+        working-directory: ${{ env.api-directory }}
+      - name: Get API Gateway URL
+        run: |
+          API_GATEWAY_URL=$(aws cloudformation describe-stacks --stack-name ${{ env.project-name }} --query "Stacks[0].Outputs[?OutputKey=='${{ env.api-gateway-name }}'].OutputValue" --output text --no-cli-pager)
+          echo "API_GATEWAY_URL=$API_GATEWAY_URL" >> $GITHUB_ENV
+      - name: Cat API Gateway URL
+        run: echo $API_GATEWAY_URL
+      - name: Check status code of curl response
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.API_GATEWAY_URL }}/ping")
+          if [ $response -eq 200 ]; then
+            echo "Success"
+          else
+            echo "Failed"
+            echo "Response code: $response"
+            echo "API Gateway URL: ${{ env.API_GATEWAY_URL }}"
+            exit 1
+          fi

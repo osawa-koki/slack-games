@@ -15,11 +15,12 @@ Resources:
   PingFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Sub ${AWS::StackName}-ping
       PackageType: Image
       Architectures:
         - x86_64
       Events:
-        Ping:
+        MyApiGateway:
           Type: Api
           Properties:
             Path: /ping
@@ -30,7 +31,7 @@ Resources:
       DockerTag: python3.9-v1
 
 Outputs:
-  PingApi:
+  MyApiGateway:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
   PingFunction:
