@@ -56,6 +56,17 @@ def main(event, context):
             "body": json.dumps(body),
         }
 
+    # ボットがメッセージを送信した場合は何もしない
+    if "subtype" in body["event"] and body["event"]["subtype"] == "bot_message":
+        return {
+            "statusCode": 200,
+            "body": json.dumps(
+                {
+                    "message": "OK",
+                }
+            ),
+        }
+
     # ここからメイン処理！
     url = "https://slack.com/api/chat.postMessage"
     form_data = {
@@ -68,6 +79,10 @@ def main(event, context):
         "url": url,
         "form_data": form_data,
         "message": "Slackにメッセージを送信しました。",
+    })
+    logger.info({
+        "body": body,
+        "message": "Slackにメッセージを受信しました。",
     })
 
     return {
