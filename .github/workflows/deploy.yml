@@ -13,7 +13,6 @@ env:
 
 jobs:
   lambda-deploy:
-    if: ${{ needs.lambda-test.outputs.test-status == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
