@@ -57,7 +57,7 @@ def main(event, context):
         }
 
     # ボットがメッセージを送信した場合は何もしない
-    if "subtype" in body["event"] and body["event"]["subtype"] == "bot_message":
+    if "bot_id" in body["event"]:
         return {
             "statusCode": 200,
             "body": json.dumps(
@@ -72,7 +72,7 @@ def main(event, context):
     form_data = {
         "token": SLACK_TOKEN,
         "channel": body["event"]["channel"],
-        "text": "Hello World!",
+        "text": "[SLACK GAMES] Hello World!",
     }
     requests.post(url, data=form_data)
     logger.info({
