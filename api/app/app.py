@@ -67,6 +67,12 @@ def main(event, context):
         "text": "Hello World!",
     }
     requests.post(url, headers=headers, data=form_data)
+    logger.info({
+        "url": url,
+        "headers": headers,
+        "form_data": form_data,
+        "message": "Slackにメッセージを送信しました。",
+    })
 
     return {
         "statusCode": 200,
