@@ -65,3 +65,32 @@ def terminate_game(channel_id):
         "success": True,
         "message": f"ゲームを終了しました。",
     }
+
+def get_game_status(channel_id):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": f"ゲームが開始されていません。",
+        }
+
+    # DynamoDBのレスポンスをPythonのデータ型に変換する
+    item_python_dict = {
+        k: deserializer.deserialize(v)
+        for k, v in ret['Item'].items()
+    }
+
+    game_name = item_python_dict['game_name']
+    users = item_python_dict['users']
+
+    return {
+        "success": True,
+        "message": f"ゲーム: {game_name}\n参加者: {', '.join(lambda u: f'<@{u}>', users)}",
+    }

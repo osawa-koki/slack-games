@@ -138,7 +138,7 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "status":
-                form_data["text"] = "ゲームの状態を表示します。"
+                result = game.get_game_status(channel_id)
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
