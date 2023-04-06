@@ -316,7 +316,7 @@ def make_action(channel_id, game_user, text):
     elif result["result"] == -1:
         return {
             "success": False,
-            "message": f"🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\n🔥🔥🔥 GAME OVER🔥🔥🔥\n🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\n\n{result['message']}",
+            "message": f"🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\n🔥🔥🔥 GAME OVER 🔥🔥🔥\n🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\n\n{result['message']}",
         }
     elif result["result"] == 1:
         return {
