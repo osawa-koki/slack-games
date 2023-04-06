@@ -1,6 +1,7 @@
 import boto3
 from decimal import Decimal
 from boto3.dynamodb.types import TypeSerializer, TypeDeserializer
+import shiritori
 
 dynamodb = boto3.client('dynamodb')
 table_name = 'slack-games-dynamodb-table'
@@ -264,3 +265,60 @@ def leave_game(channel_id, game_user):
         "success": True,
         "message": f"ゲームから抜けました。",
     }
+
+def make_action(channel_id, game_user, text):
+
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": None,
+        }
+
+    # DynamoDBのレスポンスをPythonのデータ型に変換する
+    item_python_dict = {
+        k: deserializer.deserialize(v)
+        for k, v in ret['Item'].items()
+    }
+
+    game_name = item_python_dict['game_name']
+    game_users = item_python_dict['game_users']
+    game_running = item_python_dict['running']
+
+    if not game_running:
+        return {
+            "success": False,
+            "message": None,
+        }
+
+    if game_user not in game_users:
+        return {
+            "success": False,
+            "message": None,
+        }
+
+    if game_name == 'shiritori':
+        result = shiritori.make_action(channel_id, game_user, text, item_python_dict)
+
+    if result["result"] == 0:
+        return {
+            "success": True,
+            "message": result["message"],
+        }
+    elif result["result"] == -1:
+        return {
+            "success": False,
+            "message": f"GAME OVER\n{result['message']}",
+        }
+    elif result["result"] == 1:
+        return {
+            "success": False,
+            "message": result["message"],
+        }

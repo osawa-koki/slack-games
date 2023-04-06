@@ -207,7 +207,11 @@ bye: 'さようなら'と返します。
             if re.match(check_regex, body["event"]["text"]):
                 return DEFAULT_RETURN
 
-            form_data["text"] = "未実装です。"
+            result = game.make_action(channel_id, user, body["event"]["text"].trim())
+            if result["message"] is None:
+                return DEFAULT_RETURN
+            
+            form_data["text"] = f"{result['message']}"
             requests.post(url, data=form_data)
 
         return DEFAULT_RETURN
