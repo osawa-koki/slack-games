@@ -4,7 +4,7 @@ import re
 import requests
 import os
 from dotenv import load_dotenv
-from . import game
+import game
 load_dotenv()
 
 logger = logging.getLogger()
