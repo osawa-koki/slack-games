@@ -179,9 +179,9 @@ def leave_game(channel_id, game_user):
         'Key': {
             'channel_id': {'S': channel_id}
         },
-        'UpdateExpression': 'SET game_user = :game_user',
+        'UpdateExpression': 'SET game_users = :game_users',
         'ExpressionAttributeValues': {
-            ':game_user': {'L': [{'S': u} for u in game_users]}
+            ':game_users': {'L': [{'S': u} for u in game_users]}
         }
     }
     dynamodb.update_item(**options)
