@@ -34,3 +34,21 @@ sam build --use-container ;; sam local start-api
 8. 同じく、Event Subscriptionsメニューから、Request URLにURLを入力します。
 9. Save Changesをクリックします。
 10. 再度、OAuth & Permissionsメニューから、`Install to Workspace`をクリックします。
+
+## 使用している技術
+
+- AWS
+  - Lambda
+  - API Gateway
+  - DynamoDB
+  - S3
+  - CloudFormation
+  - AWS SAM
+  - ECR
+- Slack
+  - Slack API
+- Python
+- GitHub
+  - GitHub Actions
+  - GitHub Repository
+- Docker
