@@ -162,17 +162,17 @@ def main(event, context):
             except:
                 # 例外が発生した場合はヘルプを表示する
                 form_data["text"] = """
-    【コマンド一覧】
-    help: ヘルプを表示します。
-    create <game>: ゲームを作成します。
-    start: ゲームを開始します。
-    stop: ゲームを終了します。
-    terminate: ゲームを強制終了します。
-    status: ゲームの状態を表示します。
-    join: ゲームに参加します。
-    leave: ゲームから退出します。
-    hello: 'こんにちは'と返します。
-    bye: 'さようなら'と返します。
+【コマンド一覧】
+help: ヘルプを表示します。
+create <game>: ゲームを作成します。
+start: ゲームを開始します。
+stop: ゲームを終了します。
+terminate: ゲームを強制終了します。
+status: ゲームの状態を表示します。
+join: ゲームに参加します。
+leave: ゲームから退出します。
+hello: 'こんにちは'と返します。
+bye: 'さようなら'と返します。
                 """.strip()
                 requests.post(url, data=form_data)
         else:
