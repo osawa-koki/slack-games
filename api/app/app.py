@@ -46,11 +46,9 @@ def main(event, context):
     if body is None:
         return {
             "statusCode": 400,
-            "body": json.dumps(
-                {
-                    "message": "Bad Request",
-                }
-            ),
+            "body": json.dumps({
+                "message": "Bad Request",
+            }),
         }
 
     # リトライの場合は何もしない
