@@ -31,7 +31,7 @@ def make_action(channel_id, user, text, item_python_dict):
         terminate_shiritori(channel_id)
         words_str = " -> ".join(words)
         return {
-            "result": 1,
+            "result": -1,
             "message": f"「{text}」でしりとり終了！\n\n{words_str}",
         }
 
