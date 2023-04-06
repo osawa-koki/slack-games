@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import requests
 import os
 from dotenv import load_dotenv
@@ -152,6 +153,12 @@ bye: 'さようなら'と返します。
             """.strip()
             requests.post(url, data=form_data)
     else:
+        # メンションされたメッセージは無視する
+        # app_mentionとmessage.channelsの両方で反応してしまうため
+        check_regex = r"^<@[\d\w]+>"
+        if re.match(check_regex, body["event"]["text"]):
+            return DEFAULT_RETURN
+
         logger.info(json.dumps({
             "url": url,
             "form_data": form_data,
