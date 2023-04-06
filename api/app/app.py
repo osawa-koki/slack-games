@@ -179,15 +179,6 @@ bye: 'さようなら'と返します。
         if re.match(check_regex, body["event"]["text"]):
             return DEFAULT_RETURN
 
-        logger.info(json.dumps({
-            "url": url,
-            "form_data": form_data,
-            "message": "Slackにメッセージを送信しました。",
-        }))
-        logger.info(json.dumps({
-            "body": body,
-            "message": "Slackからメッセージを受信しました。",
-        }))
         form_data["text"] = "未実装です。"
         requests.post(url, data=form_data)
 
