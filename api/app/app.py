@@ -82,7 +82,7 @@ def main(event, context):
     }))
     logger.info(json.dumps({
         "body": body,
-        "message": "Slackにメッセージを受信しました。",
+        "message": "Slackからメッセージを受信しました。",
     }))
 
     return {
