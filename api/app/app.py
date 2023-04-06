@@ -111,17 +111,17 @@ def main(event, context):
 
             try:
                 # メンションされたメッセージの2番目の要素をコマンドとして取得する
-                command = message_list[1]
+                command = message_list[1].strip()
                 if len(message_list) > 2:
-                    target = message_list[2]
+                    target = message_list[2].strip()
 
-                    # # シノニムをコマンドに変換する
-                    # if target in SHIRITORI_SYNONYMS:
-                    #     target = "shiritori"
-                    # if target in YAMANOTE_SYNONYMS:
-                    #     target = "yamanote"
-                    # if target in BLACKJACK_SYNONYMS:
-                    #     target = "blackjack"
+                    # シノニムをコマンドに変換する
+                    if target in SHIRITORI_SYNONYMS:
+                        target = "shiritori"
+                    if target in YAMANOTE_SYNONYMS:
+                        target = "yamanote"
+                    if target in BLACKJACK_SYNONYMS:
+                        target = "blackjack"
 
                 if command == "help":
                     raise Exception("")
