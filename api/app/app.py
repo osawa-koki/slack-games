@@ -17,6 +17,9 @@ PATH_PARAMETERS = 'pathParameters'
 QUERY_STRING_PARAMETERS = 'queryStringParameters'
 
 GAMES = ["shiritori", "yamanote", "blackjack"]
+SHIRITORI_SYNONYMS = ["しりとり", "シリトリ", "siri", "si"]
+YAMANOTE_SYNONYMS = ["山手線", "山手", "やまのてせん", "やまのて", "yama", "ya"]
+BLACKJACK_SYNONYMS = ["ブラックジャック", "ブラック", "blackjack", "black", "bj"]
 
 DEFAULT_RETURN = json.dumps({
     "statusCode": 200,
@@ -111,6 +114,14 @@ def main(event, context):
                 command = message_list[1]
                 if len(message_list) > 2:
                     target = message_list[2]
+
+                # シノニムをコマンドに変換する
+                if command in SHIRITORI_SYNONYMS:
+                    command = "shiritori"
+                if command in YAMANOTE_SYNONYMS:
+                    command = "yamanote"
+                if command in BLACKJACK_SYNONYMS:
+                    command = "blackjack"
 
                 if command == "help":
                     raise Exception("")
