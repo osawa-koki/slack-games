@@ -142,3 +142,51 @@ def join_game(channel_id, user):
         "success": True,
         "message": f"ゲームに参加しました。",
     }
+
+def leave_game(channel_id, user):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": f"ゲームが開始されていません。",
+        }
+
+    # DynamoDBのレスポンスをPythonのデータ型に変換する
+    item_python_dict = {
+        k: deserializer.deserialize(v)
+        for k, v in ret['Item'].items()
+    }
+
+    users = item_python_dict['users']
+
+    if user not in users:
+        return {
+            "success": False,
+            "message": f"ゲームに参加していません。",
+        }
+
+    users.remove(user)
+
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        },
+        'UpdateExpression': 'SET users = :users',
+        'ExpressionAttributeValues': {
+            ':users': {'L': [{'S': u} for u in users]}
+        }
+    }
+    dynamodb.update_item(**options)
+
+    return {
+        "success": True,
+        "message": f"ゲームから抜けました。",
+    }

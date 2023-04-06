@@ -154,7 +154,8 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "leave":
-                form_data["text"] = "ゲームから退出しました。"
+                result = game.leave_game(channel_id, user)
+                form_data["text"] = f"{result['message']}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
         except:
