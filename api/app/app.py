@@ -45,7 +45,7 @@ def main(event, context):
     # SlackのEvent APIのURL Verificationのための処理
     if "type" in body and body["type"] == "url_verification":
         query = event[QUERY_STRING_PARAMETERS]
-        if "secret" not in query or query["secret"] != SECRET:
+        if query is None or "secret" not in query or query["secret"] != SECRET:
             return {
                 "statusCode": 403,
                 "body": json.dumps(
