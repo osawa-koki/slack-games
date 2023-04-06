@@ -201,6 +201,8 @@ bye: 'さようなら'と返します。
                 """.strip()
                 requests.post(url, data=form_data)
         else:
+            user = body["event"]["user"]
+
             # メンションされたメッセージは無視する
             # app_mentionとmessage.channelsの両方で反応してしまうため
             check_regex = r"^<@[\d\w]+>"
