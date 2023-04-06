@@ -92,7 +92,7 @@ def get_game_status(channel_id):
 
     return {
         "success": True,
-        "message": f"ゲーム: {game_name}\n参加者: {map(lambda a: '<@' + a + '>', game_users)}",
+        "message": f"ゲーム: {game_name}\n参加者: {' '.join(map(lambda a: '<@' + a + '>', game_users))}",
     }
 
 def join_game(channel_id, game_user):
