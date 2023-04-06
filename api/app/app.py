@@ -111,9 +111,9 @@ def main(event, context):
 
             try:
                 # メンションされたメッセージの2番目の要素をコマンドとして取得する
-                command = message_list[1]
+                command = message_list[1].trim()
                 if len(message_list) > 2:
-                    target = message_list[2]
+                    target = message_list[2].trim()
 
                     # シノニムをコマンドに変換する
                     if target in SHIRITORI_SYNONYMS:
@@ -132,13 +132,13 @@ def main(event, context):
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
-                if command == "create":
+                if command == "create" or command == "make" or command == "mk":
                     result = game.create_game(channel_id, target, user)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
-                if command == "start":
+                if command == "start" or command == "st":
                     result = game.start_game(channel_id)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
@@ -150,13 +150,13 @@ def main(event, context):
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
-                if command == "terminate":
+                if command == "terminate" or command == "end" or command == "tm" or command == "kill":
                     result = game.terminate_game(channel_id)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
-                if command == "status":
+                if command == "status" or command == "state":
                     result = game.get_game_status(channel_id)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
