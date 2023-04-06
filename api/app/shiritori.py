@@ -13,6 +13,15 @@ def decimal_default_proc(obj):
         return float(obj)
     raise TypeError
 
+def terminate_shiritori(channel_id):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    dynamodb.delete_item(**options)
+
 def make_action(channel_id, user, text, item_python_dict):
 
     words = item_python_dict['words']
@@ -20,17 +29,20 @@ def make_action(channel_id, user, text, item_python_dict):
     if len(words) == 0:
         # なんでもOK
         words.append(text)
+        last_word = ""
 
     else:
         # しりとり
         last_word = words[-1]
         if last_word[-1] != text[0]:
+            terminate_shiritori(channel_id)
             return {
                 "result": -1,
                 "message": f"「{last_word}」の後ろに「{text}」はつけられません。",
             }
 
         if text in words:
+            terminate_shiritori(channel_id)
             return {
                 "result": -1,
                 "message": f"「{text}」は既に使われています。",
@@ -52,5 +64,5 @@ def make_action(channel_id, user, text, item_python_dict):
 
     return {
         "result": 0,
-        "message": f"+++ -> 「{text}」 -> ???",
+        "message": f"{last_word} -> 「{text}」 -> ???",
     }
