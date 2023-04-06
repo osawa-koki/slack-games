@@ -161,5 +161,7 @@ bye: 'さようなら'と返します。
             "body": body,
             "message": "Slackからメッセージを受信しました。",
         }))
+        form_data["text"] = "未実装です。"
+        requests.post(url, data=form_data)
 
     return DEFAULT_RETURN
