@@ -139,12 +139,14 @@ def main(event, context):
                     return DEFAULT_RETURN
 
                 if command == "start":
-                    form_data["text"] = "ゲームを開始しました。"
+                    result = game.start_game(channel_id, user)
+                    form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
-                if command == "stop":
-                    form_data["text"] = "ゲームを終了しました。"
+                if command == "pause":
+                    result = game.pause_game(channel_id, user)
+                    form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
@@ -181,7 +183,7 @@ def main(event, context):
                     form_data["text"] = "さようなら"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
-                
+
             except:
                 # 例外が発生した場合はヘルプを表示する
                 form_data["text"] = """
@@ -189,7 +191,7 @@ def main(event, context):
 help: ヘルプを表示します。
 create <game>: ゲームを作成します。
 start: ゲームを開始します。
-stop: ゲームを終了します。
+pause: ゲームを一時停止します。
 terminate: ゲームを強制終了します。
 status: ゲームの状態を表示します。
 join: ゲームに参加します。

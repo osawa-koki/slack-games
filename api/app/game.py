@@ -35,6 +35,7 @@ def create_game(channel_id, game_name, game_users):
             'channel_id': {'S': channel_id},
             'game_name': {'S': game_name},
             'game_users': {'L': [{'S': game_users}]},
+            'running': {'BOOL': False},
         }
     }
     dynamodb.put_item(**options)
@@ -42,6 +43,74 @@ def create_game(channel_id, game_name, game_users):
     return {
         "success": True,
         "message": f"{game_name}を作成しました。",
+    }
+
+def start_game(channel_id):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": f"ゲームが作成されていません。",
+        }
+
+    # runningフラグを立てる
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        },
+        'UpdateExpression': 'SET running = :running',
+        'ExpressionAttributeValues': {
+            ':running': {'BOOL': True}
+        }
+    }
+
+    dynamodb.update_item(**options)
+
+    return {
+        "success": True,
+        "message": f"ゲームを開始しました。",
+    }
+
+def pause_game(channel_id):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": f"ゲームが作成されていません。",
+        }
+
+    # runningフラグを下げる
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        },
+        'UpdateExpression': 'SET running = :running',
+        'ExpressionAttributeValues': {
+            ':running': {'BOOL': False}
+        }
+    }
+
+    dynamodb.update_item(**options)
+
+    return {
+        "success": True,
+        "message": f"ゲームを一時停止しました。",
     }
 
 def terminate_game(channel_id):
@@ -56,7 +125,7 @@ def terminate_game(channel_id):
     if 'Item' not in ret:
         return {
             "success": False,
-            "message": f"ゲームが開始されていません。",
+            "message": f"ゲームが作成されていません。",
         }
 
     dynamodb.delete_item(**options)
@@ -78,7 +147,7 @@ def get_game_status(channel_id):
     if 'Item' not in ret:
         return {
             "success": False,
-            "message": f"ゲームが開始されていません。",
+            "message": f"ゲームが作成されていません。",
         }
 
     # DynamoDBのレスポンスをPythonのデータ型に変換する
@@ -89,10 +158,15 @@ def get_game_status(channel_id):
 
     game_name = item_python_dict['game_name']
     game_users = item_python_dict['game_users']
+    game_running = item_python_dict['running']
+    if game_running:
+        _game_running = 'RUNNING'
+    else:
+        _game_running = 'STOPPED'
 
     return {
         "success": True,
-        "message": f"ゲーム: {game_name}\n参加者: {' '.join(map(lambda a: '<@' + a + '>', game_users))}",
+        "message": f"ゲーム: {game_name}\n状態: {_game_running}\n参加者: {' '.join(map(lambda a: '<@' + a + '>', game_users))}",
     }
 
 def join_game(channel_id, game_user):
@@ -107,7 +181,7 @@ def join_game(channel_id, game_user):
     if 'Item' not in ret:
         return {
             "success": False,
-            "message": f"ゲームが開始されていません。",
+            "message": f"ゲームが作成されていません。",
         }
 
     # DynamoDBのレスポンスをPythonのデータ型に変換する
@@ -155,7 +229,7 @@ def leave_game(channel_id, game_user):
     if 'Item' not in ret:
         return {
             "success": False,
-            "message": f"ゲームが開始されていません。",
+            "message": f"ゲームが作成されていません。",
         }
 
     # DynamoDBのレスポンスをPythonのデータ型に変換する
