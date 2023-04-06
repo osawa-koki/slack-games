@@ -148,7 +148,8 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "join":
-                form_data["text"] = "ゲームに参加しました。"
+                result = game.join_game(channel_id, user)
+                form_data["text"] = f"{result['message']}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
