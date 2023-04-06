@@ -10,6 +10,9 @@ logger.setLevel(logging.INFO)
 SECRET = os.environ.get("SECRET")
 SLACK_TOKEN = os.environ.get("SLACK_TOKEN")
 
+PATH_PARAMETERS = 'pathParameters'
+QUERY_STRING_PARAMETERS = 'queryStringParameters'
+
 def ping(event, context):
     return {
         "statusCode": 200,
@@ -40,8 +43,8 @@ def main(event, context):
     # ボディにtypeが含まれていて、url_verificationの場合は200を返す
     # SlackのEvent APIのURL Verificationのための処理
     if "type" in body and body["type"] == "url_verification":
-        secret = event["queryStringParameters"]["secret"]
-        if secret != SECRET:
+        query = event[QUERY_STRING_PARAMETERS]
+        if "secret" not in query or query["secret"] != SECRET:
             return {
                 "statusCode": 403,
                 "body": json.dumps(
