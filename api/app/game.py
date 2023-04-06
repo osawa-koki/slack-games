@@ -94,3 +94,51 @@ def get_game_status(channel_id):
         "success": True,
         "message": f"ゲーム: {game_name}\n参加者: {map(lambda a: '<@' + a + '>', users)}",
     }
+
+def join_game(channel_id, user):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": f"ゲームが開始されていません。",
+        }
+
+    # DynamoDBのレスポンスをPythonのデータ型に変換する
+    item_python_dict = {
+        k: deserializer.deserialize(v)
+        for k, v in ret['Item'].items()
+    }
+
+    users = item_python_dict['users']
+
+    if user in users:
+        return {
+            "success": False,
+            "message": f"既にゲームに参加しています。",
+        }
+
+    users.append(user)
+
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        },
+        'UpdateExpression': 'SET users = :users',
+        'ExpressionAttributeValues': {
+            ':users': {'L': [{'S': u} for u in users]}
+        }
+    }
+    dynamodb.update_item(**options)
+
+    return {
+        "success": True,
+        "message": f"ゲームに参加しました。",
+    }

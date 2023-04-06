@@ -89,6 +89,11 @@ def main(event, context):
         "text": "",
     }
 
+    logger.info(json.dumps({
+        "body": body,
+        "message": "Slackからメッセージを受信しました。",
+    }))
+
     # メンション(コマンド)かどうかを判定する
     if body["event"]["type"] == "app_mention":
 
