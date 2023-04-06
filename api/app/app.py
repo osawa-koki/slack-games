@@ -116,12 +116,12 @@ def main(event, context):
                     target = message_list[2]
 
                 # シノニムをコマンドに変換する
-                if target in SHIRITORI_SYNONYMS:
-                    target = "shiritori"
-                if target in YAMANOTE_SYNONYMS:
-                    target = "yamanote"
-                if target in BLACKJACK_SYNONYMS:
-                    target = "blackjack"
+                # if target in SHIRITORI_SYNONYMS:
+                #     target = "shiritori"
+                # if target in YAMANOTE_SYNONYMS:
+                #     target = "yamanote"
+                # if target in BLACKJACK_SYNONYMS:
+                #     target = "blackjack"
 
                 if command == "help":
                     raise Exception("")
@@ -210,7 +210,7 @@ bye: 'さようなら'と返します。
             result = game.make_action(channel_id, user, body["event"]["text"].trim())
             if result["message"] is None:
                 return DEFAULT_RETURN
-            
+
             form_data["text"] = f"{result['message']}"
             requests.post(url, data=form_data)
 
