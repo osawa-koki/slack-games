@@ -145,6 +145,7 @@ def main(event, context):
 
                 if command == "status":
                     result = game.get_game_status(channel_id)
+                    form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
