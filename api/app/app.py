@@ -14,6 +14,17 @@ SLACK_TOKEN = os.environ.get("SLACK_TOKEN")
 PATH_PARAMETERS = 'pathParameters'
 QUERY_STRING_PARAMETERS = 'queryStringParameters'
 
+GAMES = ["shiritori", "yamanote", "blackjack"]
+
+DEFAULT_RETURN = json.dumps({
+    "statusCode": 200,
+    "body": json.dumps(
+        {
+            "message": "OK",
+        }
+    ),
+})
+
 def ping(event, context):
     return {
         "statusCode": 200,
@@ -70,29 +81,85 @@ def main(event, context):
             ),
         }
 
-    # ここからメイン処理！
     url = "https://slack.com/api/chat.postMessage"
     form_data = {
         "token": SLACK_TOKEN,
         "channel": body["event"]["channel"],
-        "text": "[SLACK GAMES] Hello World!",
+        "text": "",
     }
-    requests.post(url, data=form_data)
-    logger.info(json.dumps({
-        "url": url,
-        "form_data": form_data,
-        "message": "Slackにメッセージを送信しました。",
-    }))
-    logger.info(json.dumps({
-        "body": body,
-        "message": "Slackからメッセージを受信しました。",
-    }))
 
-    return {
-        "statusCode": 200,
-        "body": json.dumps(
-            {
-                "message": "OK",
-            }
-        ),
-    }
+    # メンション(コマンド)かどうかを判定する
+    if body["event"]["type"] == "app_mention":
+        # メンションされたメッセージを取得する
+        message = body["event"]["text"]
+        # メンションされたメッセージをスペースで分割する
+        message_list = message.split(" ")
+        try:
+            # メンションされたメッセージの2番目の要素をコマンドとして取得する
+            command = message_list[1]
+            target = message_list[2]
+
+            if command == "help":
+                raise Exception("")
+
+            if command == "create" and target not in GAMES:
+                form_data["text"] = "ゲームが存在しません。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "create":
+                form_data["text"] = f"{target}を作成しました。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "start":
+                form_data["text"] = f"{target}を開始しました。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "stop":
+                form_data["text"] = f"{target}を終了しました。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "status":
+                form_data["text"] = f"{target}の状態を表示します。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "join":
+                form_data["text"] = f"{target}に参加しました。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "leave":
+                form_data["text"] = f"{target}から退出しました。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+        except:
+            # 例外が発生した場合はヘルプを表示する
+            form_data["text"] = """
+                【コマンド一覧】
+                help: ヘルプを表示します。
+                create <game>: ゲームを作成します。
+                start: ゲームを開始します。
+                stop: ゲームを終了します。
+                status: ゲームの状態を表示します。
+                join: ゲームに参加します。
+                leave: ゲームから退出します。
+                hello: 'こんにちは'と返します。
+                bye: 'さようなら'と返します。
+            """.strip()
+            requests.post(url, data=form_data)
+    else:
+        logger.info(json.dumps({
+            "url": url,
+            "form_data": form_data,
+            "message": "Slackにメッセージを送信しました。",
+        }))
+        logger.info(json.dumps({
+            "body": body,
+            "message": "Slackからメッセージを受信しました。",
+        }))
+
+    return DEFAULT_RETURN
