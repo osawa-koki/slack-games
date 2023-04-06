@@ -16,10 +16,10 @@ SLACK_TOKEN = os.environ.get("SLACK_TOKEN")
 PATH_PARAMETERS = 'pathParameters'
 QUERY_STRING_PARAMETERS = 'queryStringParameters'
 
-GAMES = ["shiritori", "siritori", "yamanote", "blackjack"]
-SHIRITORI_SYNONYMS = ["しりとり", "シリトリ", "siri", "si"]
+GAMES = ["shiritori", "yamanote", "blackjack"]
+SHIRITORI_SYNONYMS = ["siritori", "しりとり", "シリトリ", "shiri", "siri", "shi", "si"]
 YAMANOTE_SYNONYMS = ["山手線", "山手", "やまのてせん", "やまのて", "yama", "ya"]
-BLACKJACK_SYNONYMS = ["ブラックジャック", "ブラック", "blackjack", "black", "bj"]
+BLACKJACK_SYNONYMS = ["ブラックジャック", "ブラック", "blackjack", "black", "bj", "bl"]
 
 DEFAULT_RETURN = json.dumps({
     "statusCode": 200,
