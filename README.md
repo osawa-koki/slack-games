@@ -33,3 +33,4 @@ sam build --use-container ;; sam local start-api
    - `app_mention`
 8. 同じく、Event Subscriptionsメニューから、Request URLにURLを入力します。
 9. Save Changesをクリックします。
+10. 再度、OAuth & Permissionsメニューから、`Install to Workspace`をクリックします。
