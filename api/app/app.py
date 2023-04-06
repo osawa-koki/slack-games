@@ -125,27 +125,27 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "start":
-                form_data["text"] = f"{target}を開始しました。"
+                form_data["text"] = "ゲームを開始しました。"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
             if command == "stop":
-                form_data["text"] = f"{target}を終了しました。"
+                form_data["text"] = "ゲームを終了しました。"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
             if command == "status":
-                form_data["text"] = f"{target}の状態を表示します。"
+                form_data["text"] = "ゲームの状態を表示します。"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
             if command == "join":
-                form_data["text"] = f"{target}に参加しました。"
+                form_data["text"] = "ゲームに参加しました。"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
             if command == "leave":
-                form_data["text"] = f"{target}から退出しました。"
+                form_data["text"] = "ゲームから退出しました。"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
         except:
