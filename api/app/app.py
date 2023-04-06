@@ -111,9 +111,9 @@ def main(event, context):
 
             try:
                 # メンションされたメッセージの2番目の要素をコマンドとして取得する
-                command = message_list[1].trim()
+                command = message_list[1]
                 if len(message_list) > 2:
-                    target = message_list[2].trim()
+                    target = message_list[2]
 
                     # # シノニムをコマンドに変換する
                     # if target in SHIRITORI_SYNONYMS:
