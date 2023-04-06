@@ -37,6 +37,7 @@ def create_game(channel_id, game_name, game_users):
             'game_name': {'S': game_name},
             'game_users': {'L': [{'S': game_users}]},
             'running': {'BOOL': False},
+            'words': {'L': []}, # shiritori用
         }
     }
     dynamodb.put_item(**options)

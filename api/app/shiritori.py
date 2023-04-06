@@ -51,6 +51,6 @@ def make_action(channel_id, user, text, item_python_dict):
     dynamodb.update_item(**options)
 
     return {
-        "success": 0,
+        "result": 0,
         "message": f"+++ -> 「{text}」 -> ???",
     }
