@@ -164,7 +164,7 @@ def get_game_status(channel_id):
     if game_running:
         _game_running = 'RUNNING'
     else:
-        _game_running = 'STOPPED'
+        _game_running = 'NOT RUNNING'
 
     return {
         "success": True,
