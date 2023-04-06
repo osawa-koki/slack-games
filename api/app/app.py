@@ -62,11 +62,9 @@ def main(event, context):
         if query is None or "secret" not in query or query["secret"] != SECRET:
             return {
                 "statusCode": 403,
-                "body": json.dumps(
-                    {
-                        "message": "Forbidden",
-                    }
-                ),
+                "body": json.dumps({
+                    "message": "Forbidden",
+                }),
             }
         return {
             "statusCode": 200,
@@ -77,11 +75,9 @@ def main(event, context):
     if "bot_id" in body["event"]:
         return {
             "statusCode": 200,
-            "body": json.dumps(
-                {
-                    "message": "OK",
-                }
-            ),
+            "body": json.dumps({
+                "message": "OK",
+            }),
         }
 
     url = "https://slack.com/api/chat.postMessage"
