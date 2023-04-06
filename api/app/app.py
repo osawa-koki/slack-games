@@ -16,7 +16,7 @@ SLACK_TOKEN = os.environ.get("SLACK_TOKEN")
 PATH_PARAMETERS = 'pathParameters'
 QUERY_STRING_PARAMETERS = 'queryStringParameters'
 
-GAMES = ["shiritori", "yamanote", "blackjack"]
+GAMES = ["shiritori", "siritori", "yamanote", "blackjack"]
 SHIRITORI_SYNONYMS = ["しりとり", "シリトリ", "siri", "si"]
 YAMANOTE_SYNONYMS = ["山手線", "山手", "やまのてせん", "やまのて", "yama", "ya"]
 BLACKJACK_SYNONYMS = ["ブラックジャック", "ブラック", "blackjack", "black", "bj"]
@@ -115,13 +115,13 @@ def main(event, context):
                 if len(message_list) > 2:
                     target = message_list[2]
 
-                # シノニムをコマンドに変換する
-                # if target in SHIRITORI_SYNONYMS:
-                #     target = "shiritori"
-                # if target in YAMANOTE_SYNONYMS:
-                #     target = "yamanote"
-                # if target in BLACKJACK_SYNONYMS:
-                #     target = "blackjack"
+                    # シノニムをコマンドに変換する
+                    if target in SHIRITORI_SYNONYMS:
+                        target = "shiritori"
+                    if target in YAMANOTE_SYNONYMS:
+                        target = "yamanote"
+                    if target in BLACKJACK_SYNONYMS:
+                        target = "blackjack"
 
                 if command == "help":
                     raise Exception("")
