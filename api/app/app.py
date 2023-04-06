@@ -207,7 +207,7 @@ bye: 'さようなら'と返します。
             if re.match(check_regex, body["event"]["text"]):
                 return DEFAULT_RETURN
 
-            result = game.make_action(channel_id, user, body["event"]["text"].trim())
+            result = game.make_action(channel_id, user, body["event"]["text"].strip())
             if result["message"] is None:
                 return DEFAULT_RETURN
 
