@@ -4,6 +4,7 @@ import re
 import requests
 import os
 from dotenv import load_dotenv
+from . import game
 load_dotenv()
 
 logger = logging.getLogger()
@@ -108,7 +109,9 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "create":
-                form_data["text"] = f"{target}を作成しました。"
+                form_data["text"] = f"{target}を作成しました。\n"
+                result = game.create_game(target)
+                form_data["text"] += f"{result['message']}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 

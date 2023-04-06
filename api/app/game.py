@@ -13,7 +13,7 @@ def decimal_default_proc(obj):
         return float(obj)
     raise TypeError
 
-def game_create(channel_id, game_name, user):
+def create_game(channel_id, game_name, user):
 
     options = {
         'TableName': table_name,
