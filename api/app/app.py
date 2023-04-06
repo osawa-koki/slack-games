@@ -115,9 +115,8 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "create":
-                form_data["text"] = f"{target}を作成しました。\n"
                 result = game.create_game(channel_id, target, user)
-                form_data["text"] += f"{result['message']}"
+                form_data["text"] = f"{result['message']}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
@@ -132,8 +131,8 @@ def main(event, context):
                 return DEFAULT_RETURN
 
             if command == "terminate":
-                form_data["text"] = "ゲームを強制終了しました。"
                 result = game.terminate_game(channel_id)
+                form_data["text"] = f"{result['message']}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
