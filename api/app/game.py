@@ -43,3 +43,25 @@ def create_game(channel_id, game_name, user):
         "success": True,
         "message": f"{game_name}を作成しました。",
     }
+
+def terminate_game(channel_id):
+    options = {
+        'TableName': table_name,
+        'Key': {
+            'channel_id': {'S': channel_id}
+        }
+    }
+    ret = dynamodb.get_item(**options)
+
+    if 'Item' not in ret:
+        return {
+            "success": False,
+            "message": f"ゲームが開始されていません。",
+        }
+
+    dynamodb.delete_item(**options)
+
+    return {
+        "success": True,
+        "message": f"ゲームを終了しました。",
+    }

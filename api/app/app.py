@@ -82,18 +82,24 @@ def main(event, context):
         }
 
     url = "https://slack.com/api/chat.postMessage"
+    channel_id = body["event"]["channel"]
     form_data = {
         "token": SLACK_TOKEN,
-        "channel": body["event"]["channel"],
+        "channel": channel_id,
         "text": "",
     }
 
     # メンション(コマンド)かどうかを判定する
     if body["event"]["type"] == "app_mention":
+
         # メンションされたメッセージを取得する
         message = body["event"]["text"]
+
         # メンションされたメッセージをスペースで分割する
         message_list = message.split(" ")
+
+        user = body["event"]["user"]
+
         try:
             # メンションされたメッセージの2番目の要素をコマンドとして取得する
             command = message_list[1]
@@ -110,7 +116,7 @@ def main(event, context):
 
             if command == "create":
                 form_data["text"] = f"{target}を作成しました。\n"
-                result = game.create_game(target)
+                result = game.create_game(channel_id, target, user)
                 form_data["text"] += f"{result['message']}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
@@ -122,6 +128,12 @@ def main(event, context):
 
             if command == "stop":
                 form_data["text"] = "ゲームを終了しました。"
+                requests.post(url, data=form_data)
+                return DEFAULT_RETURN
+
+            if command == "terminate":
+                form_data["text"] = "ゲームを強制終了しました。"
+                result = game.terminate_game(channel_id)
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
@@ -147,6 +159,7 @@ help: ヘルプを表示します。
 create <game>: ゲームを作成します。
 start: ゲームを開始します。
 stop: ゲームを終了します。
+terminate: ゲームを強制終了します。
 status: ゲームの状態を表示します。
 join: ゲームに参加します。
 leave: ゲームから退出します。
