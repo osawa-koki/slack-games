@@ -116,12 +116,12 @@ def main(event, context):
                     target = message_list[2]
 
                 # シノニムをコマンドに変換する
-                if command in SHIRITORI_SYNONYMS:
-                    command = "shiritori"
-                if command in YAMANOTE_SYNONYMS:
-                    command = "yamanote"
-                if command in BLACKJACK_SYNONYMS:
-                    command = "blackjack"
+                if target in SHIRITORI_SYNONYMS:
+                    target = "shiritori"
+                if target in YAMANOTE_SYNONYMS:
+                    target = "yamanote"
+                if target in BLACKJACK_SYNONYMS:
+                    target = "blackjack"
 
                 if command == "help":
                     raise Exception("")
