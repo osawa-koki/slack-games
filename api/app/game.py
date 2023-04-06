@@ -13,7 +13,7 @@ def decimal_default_proc(obj):
         return float(obj)
     raise TypeError
 
-def create_game(channel_id, game_name, user):
+def create_game(channel_id, game_name, game_users):
 
     options = {
         'TableName': table_name,
@@ -34,7 +34,7 @@ def create_game(channel_id, game_name, user):
         'Item': {
             'channel_id': {'S': channel_id},
             'game_name': {'S': game_name},
-            'users': {'L': [{'S': user}]},
+            'game_users': {'L': [{'S': game_users}]},
         }
     }
     dynamodb.put_item(**options)
@@ -88,14 +88,14 @@ def get_game_status(channel_id):
     }
 
     game_name = item_python_dict['game_name']
-    users = item_python_dict['users']
+    game_users = item_python_dict['game_users']
 
     return {
         "success": True,
-        "message": f"ゲーム: {game_name}\n参加者: {map(lambda a: '<@' + a + '>', users)}",
+        "message": f"ゲーム: {game_name}\n参加者: {map(lambda a: '<@' + a + '>', game_users)}",
     }
 
-def join_game(channel_id, user):
+def join_game(channel_id, game_user):
     options = {
         'TableName': table_name,
         'Key': {
@@ -116,24 +116,24 @@ def join_game(channel_id, user):
         for k, v in ret['Item'].items()
     }
 
-    users = item_python_dict['users']
+    game_users = item_python_dict['game_users']
 
-    if user in users:
+    if game_user in game_users:
         return {
             "success": False,
             "message": f"既にゲームに参加しています。",
         }
 
-    users.append(user)
+    game_users.append(game_user)
 
     options = {
         'TableName': table_name,
         'Key': {
             'channel_id': {'S': channel_id}
         },
-        'UpdateExpression': 'SET users = :users',
+        'UpdateExpression': 'SET game_users = :game_users',
         'ExpressionAttributeValues': {
-            ':users': {'L': [{'S': u} for u in users]}
+            ':game_users': {'L': [{'S': u} for u in game_users]}
         }
     }
     dynamodb.update_item(**options)
@@ -143,7 +143,7 @@ def join_game(channel_id, user):
         "message": f"ゲームに参加しました。",
     }
 
-def leave_game(channel_id, user):
+def leave_game(channel_id, game_user):
     options = {
         'TableName': table_name,
         'Key': {
@@ -164,24 +164,24 @@ def leave_game(channel_id, user):
         for k, v in ret['Item'].items()
     }
 
-    users = item_python_dict['users']
+    game_users = item_python_dict['game_users']
 
-    if user not in users:
+    if game_user not in game_users:
         return {
             "success": False,
             "message": f"ゲームに参加していません。",
         }
 
-    users.remove(user)
+    game_users.remove(game_user)
 
     options = {
         'TableName': table_name,
         'Key': {
             'channel_id': {'S': channel_id}
         },
-        'UpdateExpression': 'SET users = :users',
+        'UpdateExpression': 'SET game_user = :game_user',
         'ExpressionAttributeValues': {
-            ':users': {'L': [{'S': u} for u in users]}
+            ':game_user': {'L': [{'S': u} for u in game_users]}
         }
     }
     dynamodb.update_item(**options)
