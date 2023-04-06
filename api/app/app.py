@@ -55,11 +55,9 @@ def main(event, context):
     if "X-Slack-Retry-Num" in event["headers"]:
         return {
             "statusCode": 200,
-            "body": json.dumps(
-                {
-                    "message": "OK",
-                }
-            ),
+            "body": json.dumps({
+                "message": "OK",
+            }),
         }
 
     # ボディにtypeが含まれていて、url_verificationの場合は200を返す
