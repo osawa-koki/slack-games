@@ -139,13 +139,13 @@ def main(event, context):
                     return DEFAULT_RETURN
 
                 if command == "start":
-                    result = game.start_game(channel_id, user)
+                    result = game.start_game(channel_id)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
                 if command == "pause":
-                    result = game.pause_game(channel_id, user)
+                    result = game.pause_game(channel_id)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
