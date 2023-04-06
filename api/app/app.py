@@ -75,15 +75,15 @@ def main(event, context):
         "text": "[SLACK GAMES] Hello World!",
     }
     requests.post(url, data=form_data)
-    logger.info({
+    logger.info(json.dumps({
         "url": url,
         "form_data": form_data,
         "message": "Slackにメッセージを送信しました。",
-    })
-    logger.info({
+    }))
+    logger.info(json.dumps({
         "body": body,
         "message": "Slackにメッセージを受信しました。",
-    })
+    }))
 
     return {
         "statusCode": 200,
