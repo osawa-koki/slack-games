@@ -171,6 +171,17 @@ def main(event, context):
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
+
+                if command == "hello":
+                    form_data["text"] = "こんにちは"
+                    requests.post(url, data=form_data)
+                    return DEFAULT_RETURN
+
+                if command == "bye":
+                    form_data["text"] = "さようなら"
+                    requests.post(url, data=form_data)
+                    return DEFAULT_RETURN
+                
             except:
                 # 例外が発生した場合はヘルプを表示する
                 form_data["text"] = """
