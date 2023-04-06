@@ -115,7 +115,8 @@ def main(event, context):
                 raise Exception("")
 
             if command == "create" and target not in GAMES:
-                form_data["text"] = "ゲームが存在しません。"
+                form_data["text"] = "指定したゲームが存在しません。\n"
+                form_data["text"] += f"ゲーム一覧: {', '.join(GAMES)}"
                 requests.post(url, data=form_data)
                 return DEFAULT_RETURN
 
