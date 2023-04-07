@@ -2,6 +2,7 @@ import boto3
 from decimal import Decimal
 from boto3.dynamodb.types import TypeSerializer, TypeDeserializer
 import shiritori
+import yamanote
 
 dynamodb = boto3.client('dynamodb')
 table_name = 'slack-games-dynamodb-table'
@@ -38,6 +39,7 @@ def create_game(channel_id, game_name, game_users):
             'game_users': {'L': [{'S': game_users}]},
             'running': {'BOOL': False},
             'words': {'L': []}, # shiritori用
+            'stations': {'L': []}, # yamanote用
         }
     }
     dynamodb.put_item(**options)
@@ -307,6 +309,8 @@ def make_action(channel_id, game_user, text):
 
     if game_name == 'shiritori':
         result = shiritori.make_action(channel_id, game_user, text, item_python_dict)
+    if game_name == 'yamanote':
+        result = yamanote.make_action(channel_id, game_user, text, item_python_dict)
 
     if result["result"] == 0:
         return {
