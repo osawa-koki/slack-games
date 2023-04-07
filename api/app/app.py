@@ -124,9 +124,11 @@ def main(event, context):
                 if command == "help":
                     raise Exception("")
 
+                command_is_create = False
                 if command == "create" or command == "make" or command == "mk":
                     command_is_create = True
 
+                command_is_execute = False
                 if command == "execute" or command == "exec":
                     command_is_execute = True
 
