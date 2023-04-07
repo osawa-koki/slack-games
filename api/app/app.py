@@ -217,7 +217,7 @@ join: ゲームに参加します。
 leave: ゲームから退出します。
 hello: 'こんにちは'と返します。
 bye: 'さようなら'と返します。
-                """.strip() + "\n" + str(ex)
+                """.strip()
                 requests.post(url, data=form_data)
         else:
             user = body["event"]["user"]
