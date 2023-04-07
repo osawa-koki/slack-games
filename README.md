@@ -5,8 +5,10 @@
 ## ゲーム一覧
 
 - [x] しりとり
+- [x] 山手線ゲーム
 
 ![しりとり](./docs/img/shiritori.gif)  
+![山手線ゲーム](./docs/img/yamanote.gif)  
 
 <!-- 1152 x 755 -->
 
