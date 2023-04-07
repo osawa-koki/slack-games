@@ -126,7 +126,7 @@ def main(event, context):
 
                 command_is_create = False
                 command_is_execute = False
-                
+
                 if command == "create" or command == "make" or command == "mk":
                     command_is_create = True
 
@@ -155,9 +155,10 @@ def main(event, context):
                     result = game.create_game(channel_id, target, user)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
-                    result = game.start_game(channel_id)
-                    form_data["text"] = f"{result['message']}"
-                    requests.post(url, data=form_data)
+                    if result["success"]:
+                        result = game.start_game(channel_id)
+                        form_data["text"] = f"{result['message']}"
+                        requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
                 if command == "pause":
