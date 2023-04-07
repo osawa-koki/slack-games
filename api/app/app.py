@@ -128,7 +128,7 @@ def main(event, context):
                     command_is_create = True
 
                 if command == "execute" or command == "exec":
-                    command_is_execute = False
+                    command_is_execute = True
 
                 if (command_is_create or command_is_execute) and target not in GAMES:
                     form_data["text"] = "指定したゲームが存在しません。\n"
