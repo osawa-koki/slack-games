@@ -124,11 +124,9 @@ def main(event, context):
                 if command == "help":
                     raise Exception("")
 
-                command_is_create = False
                 if command == "create" or command == "make" or command == "mk":
                     command_is_create = True
 
-                command_is_execute = False
                 if command == "execute" or command == "exec":
                     command_is_execute = True
 
@@ -151,7 +149,7 @@ def main(event, context):
                     return DEFAULT_RETURN
 
                 if command_is_execute:
-                    result = game.create_game(channel_id, target)
+                    result = game.create_game(channel_id, target, user)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     result = game.start_game(channel_id)
