@@ -207,6 +207,7 @@ def main(event, context):
 help: ヘルプを表示します。
 create <game>: ゲームを作成します。
 start: ゲームを開始します。
+execute <game>: ゲームを作成して開始します。
 pause: ゲームを一時停止します。
 terminate: ゲームを強制終了します。
 status: ゲームの状態を表示します。
