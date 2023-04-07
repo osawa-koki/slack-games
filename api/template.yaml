@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  python3.9
+  Sample SAM Template for slack-games
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  MyLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-lambda-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ${AWS::StackName}-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: AllowDynamoDBTable
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Resource: !GetAtt MyDynamoDBTable.Arn
+  MyDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: channel_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: channel_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      TableName: !Sub ${AWS::StackName}-dynamodb-table
+  PingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-ping
+      PackageType: Image
+      ImageConfig:
+        Command: [ "app.ping" ]
+      Architectures:
+        - x86_64
+      Events:
+        MyApiGateway:
+          Type: Api
+          Properties:
+            Path: /ping
+            Method: get
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./app
+      DockerTag: python3.9-v1
+  MainFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-main
+      PackageType: Image
+      Role: !GetAtt MyLambdaRole.Arn
+      ImageConfig:
+        Command: [ "app.main" ]
+      Architectures:
+        - x86_64
+      Events:
+        MyApiGateway:
+          Type: Api
+          Properties:
+            Path: /
+            Method: post
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./app
+      DockerTag: python3.9-v1
+
+Outputs:
+  MyApiGateway:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
