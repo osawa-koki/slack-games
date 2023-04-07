@@ -324,6 +324,6 @@ def make_action(channel_id, game_user, text):
         }
     elif result["result"] == 1:
         return {
-            "success": False,
+            "success": True,
             "message": result["message"],
         }

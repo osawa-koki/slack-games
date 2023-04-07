@@ -76,6 +76,15 @@ def make_action(channel_id, user, text, item_python_dict):
             "message": f"「{text}」は既に使われています。\n\n{stations_str}",
         }
 
+    # すべての駅を通過した場合
+    if len(stations) == len(yamanote_stations):
+        terminate_yamanote(channel_id)
+        stations_str = " -> ".join(stations)
+        return {
+            "result": 1,
+            "message": f"🚅🚃🚄🚉🚊🚆🚈\n🏔 山手線を一周しました！ 🏔\n🚅🚃🚄🚉🚊🚆🚈\n\n{stations_str}",
+        }
+
     stations.append(text)
 
     options = {
