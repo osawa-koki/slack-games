@@ -184,6 +184,8 @@ def main(event, context):
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
+                raise Exception("")
+
             except:
                 # 例外が発生した場合はヘルプを表示する
                 form_data["text"] = """
