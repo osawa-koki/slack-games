@@ -16,10 +16,9 @@ SLACK_TOKEN = os.environ.get("SLACK_TOKEN")
 PATH_PARAMETERS = 'pathParameters'
 QUERY_STRING_PARAMETERS = 'queryStringParameters'
 
-GAMES = ["shiritori", "yamanote", "blackjack"]
+GAMES = ["shiritori", "yamanote"]
 SHIRITORI_SYNONYMS = ["siritori", "しりとり", "シリトリ", "shiri", "siri", "shi", "si"]
 YAMANOTE_SYNONYMS = ["山手線", "山手", "やまのてせん", "やまのて", "yama", "ya"]
-BLACKJACK_SYNONYMS = ["ブラックジャック", "ブラック", "blackjack", "black", "bj", "bl"]
 
 DEFAULT_RETURN = json.dumps({
     "statusCode": 200,
@@ -118,8 +117,6 @@ def main(event, context):
                         target = "shiritori"
                     if target in YAMANOTE_SYNONYMS:
                         target = "yamanote"
-                    if target in BLACKJACK_SYNONYMS:
-                        target = "blackjack"
 
                 if command == "help":
                     raise Exception("")
