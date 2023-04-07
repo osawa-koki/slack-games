@@ -127,7 +127,8 @@ def main(event, context):
                 if command == "create" or command == "make" or command == "mk":
                     command_is_create = True
 
-                command_is_execute = True
+                if command == "execute" or command == "exec":
+                    command_is_execute = True
 
                 if (command_is_create or command_is_execute) and target not in GAMES:
                     form_data["text"] = "指定したゲームが存在しません。\n"
@@ -198,7 +199,7 @@ def main(event, context):
 
                 raise Exception("")
 
-            except:
+            except Exception as ex:
                 # 例外が発生した場合はヘルプを表示する
                 form_data["text"] = """
 【コマンド一覧】
@@ -212,7 +213,7 @@ join: ゲームに参加します。
 leave: ゲームから退出します。
 hello: 'こんにちは'と返します。
 bye: 'さようなら'と返します。
-                """.strip()
+                """.strip() + "\n" + str(ex)
                 requests.post(url, data=form_data)
         else:
             user = body["event"]["user"]
