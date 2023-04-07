@@ -23,11 +23,9 @@ BLACKJACK_SYNONYMS = ["ブラックジャック", "ブラック", "blackjack", "
 
 DEFAULT_RETURN = json.dumps({
     "statusCode": 200,
-    "body": json.dumps(
-        {
-            "message": "OK",
-        }
-    ),
+    "body": json.dumps({
+        "message": "OK",
+    }),
 })
 
 def ping(event, context):
