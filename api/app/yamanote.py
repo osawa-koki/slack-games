@@ -76,6 +76,8 @@ def make_action(channel_id, user, text, item_python_dict):
             "message": f"「{text}」は既に使われています。\n\n{stations_str}",
         }
 
+    stations.append(text)
+
     options = {
         'TableName': table_name,
         'Key': {
