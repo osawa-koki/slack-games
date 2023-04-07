@@ -124,19 +124,34 @@ def main(event, context):
                 if command == "help":
                     raise Exception("")
 
-                if command == "create" and target not in GAMES:
+                if command == "create" or command == "make" or command == "mk":
+                    command_is_create = True
+
+                if command == "execute" or command == "exec":
+                    command_is_execute = False
+
+                if (command_is_create or command_is_execute) and target not in GAMES:
                     form_data["text"] = "指定したゲームが存在しません。\n"
                     form_data["text"] += f"ゲーム一覧: {', '.join(GAMES)}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
-                if command == "create" or command == "make" or command == "mk":
+                if command_is_create:
                     result = game.create_game(channel_id, target, user)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
                     return DEFAULT_RETURN
 
                 if command == "start" or command == "st":
+                    result = game.start_game(channel_id)
+                    form_data["text"] = f"{result['message']}"
+                    requests.post(url, data=form_data)
+                    return DEFAULT_RETURN
+
+                if command_is_execute:
+                    result = game.create_game(channel_id, target)
+                    form_data["text"] = f"{result['message']}"
+                    requests.post(url, data=form_data)
                     result = game.start_game(channel_id)
                     form_data["text"] = f"{result['message']}"
                     requests.post(url, data=form_data)
